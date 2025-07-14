@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regalo Zula</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #f1f1f1;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background-color: #1e1e1e;
+      max-width: 500px;
+      width: 90%;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 32px;
+      color: #f1f1f1;
+    }
+    .emoji-title::before, .emoji-title::after {
+      content: '⚡';
+      margin: 0 10px;
+    }
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .tab-button {
+      flex: 1;
+      padding: 12px;
+      cursor: pointer;
+      background: #333;
+      color: #ccc;
+      border: none;
+      font-weight: bold;
+      border-radius: 10px 10px 0 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .tab-button.active {
+      background: #d4a017;
+      color: #000;
+      border-bottom: 2px solid #1e1e1e;
+    }
+    .form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+    }
+    .form-group {
+      margin: 15px 0;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #f1f1f1;
+    }
+    .form-group input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background-color: #2a2a2a;
+      color: #f1f1f1;
+      font-size: 16px;
+    }
+    button.watch {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background-color: #d4a017;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .nav-arrows {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .arrow-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #f1f1f1;
+    }
+    .arrow-button:disabled {
+      color: #555;
+      cursor: not-allowed;
+    }
+    .choose-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      background-color: #333;
+      color: #f1f1f1;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .tab-button {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="emoji-title">Film4Fra</h1>
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('film')">Film</button>
+      <button class="tab-button" onclick="switchTab('serie')">Serie</button>
+    </div>
+
+    <div id="film" class="form-section active">
+      <a class="choose-link" href="https://www.themoviedb.org/movie?language=it-IT" target="_blank">Scegli un film</a>
+      <div class="form-group">
+        <label for="film-code">Quale è il codice film?</label>
+        <input type="text" id="film-code">
+      </div>
+      <button class="watch" onclick="watchMovie()">Guarda</button>
+    </div>
+
+    <div id="serie" class="form-section">
+      <a class="choose-link" href="https://www.themoviedb.org/tv?language=it-IT" target="_blank">Scegli una serie</a>
+      <div class="form-group">
+        <label for="serie-code">Quale è la serie che vuoi vedere?</label>
+        <input type="text" id="serie-code">
+      </div>
+      <div class="form-group">
+        <label for="season">Stagione</label>
+        <input type="number" id="season" value="1" min="1">
+      </div>
+      <div class="form-group">
+        <label for="episode">Episodio</label>
+        <input type="number" id="episode" value="1" min="1">
+      </div>
+      <button class="watch" onclick="watchSeries()">Guarda</button>
+      <div class="nav-arrows">
+        <button id="back-arrow" class="arrow-button" onclick="navigateEpisode(-1)">&#8592;</button>
+        <button id="forward-arrow" class="arrow-button" onclick="navigateEpisode(1)">&#8594;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentTab = 'film';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+      document.querySelector(`#${tab}`).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function watchMovie() {
+      const code = document.getElementById('film-code').value.trim();
+      if (code) {
+        window.open(`https://vixsrc.to/movie/${code}`, '_blank');
+      }
+    }
+
+    function watchSeries() {
+      const code = document.getElementById('serie-code').value.trim();
+      const season = parseInt(document.getElementById('season').value);
+      const episode = parseInt(document.getElementById('episode').value);
+      if (code && season > 0 && episode > 0) {
+        const url = `https://vixsrc.to/tv/${code}/${season}/${episode}`;
+        window.open(url, '_blank');
+        updateArrowStatus(season, episode);
+      }
+    }
+
+    function navigateEpisode(direction) {
+      let seasonInput = document.getElementById('season');
+      let episodeInput = document.getElementById('episode');
+      let episode = parseInt(episodeInput.value);
+      let season = parseInt(seasonInput.value);
+      if (direction === -1 && (season === 1 && episode === 1)) return;
+      episode += direction;
+      if (episode < 1) {
+        episode = 1;
+      }
+      episodeInput.value = episode;
+      watchSeries();
+    }
+
+    function updateArrowStatus(season, episode) {
+      const backArrow = document.getElementById('back-arrow');
+      backArrow.disabled = (season === 1 && episode === 1);
+    }
+  </script>
+</body>
+</html>
