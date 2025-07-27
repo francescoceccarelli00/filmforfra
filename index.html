@@ -167,6 +167,10 @@
     </div>
   </div>
 
+  <div id="video-container" style="width: 90%; max-width: 800px; aspect-ratio: 16 / 9; margin-top: 30px; border-radius: 16px; overflow: hidden; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.6);">
+  <iframe id="video-frame" src="" frameborder="0" allowfullscreen style="width: 100%; height: 100%;"></iframe>
+</div>
+  
   <script>
     let currentTab = 'film';
 
@@ -178,24 +182,24 @@
       event.target.classList.add('active');
     }
 
-    function watchMovie() {
-      const code = document.getElementById('film-code').value.trim();
-      if (code) {
-        window.open(`https://vixsrc.to/movie/${code}`, '_blank');
-      }
-    }
+function watchMovie() {
+  const code = document.getElementById('film-code').value.trim();
+  if (code) {
+    const url = `https://vixsrc.to/movie/${code}`;
+    loadVideoInIframe(url);
+  }
+}
 
-    function watchSeries() {
-      const code = document.getElementById('serie-code').value.trim();
-      const season = parseInt(document.getElementById('season').value);
-      const episode = parseInt(document.getElementById('episode').value);
-      if (code && season > 0 && episode > 0) {
-        const url = `https://vixsrc.to/tv/${code}/${season}/${episode}`;
-        window.open(url, '_blank');
-        updateArrowStatus(season, episode);
-      }
-    }
-
+function watchSeries() {
+  const code = document.getElementById('serie-code').value.trim();
+  const season = parseInt(document.getElementById('season').value);
+  const episode = parseInt(document.getElementById('episode').value);
+  if (code && season > 0 && episode > 0) {
+    const url = `https://vixsrc.to/tv/${code}/${season}/${episode}`;
+    loadVideoInIframe(url);
+    updateArrowStatus(season, episode);
+  }
+}
     function navigateEpisode(direction) {
       let seasonInput = document.getElementById('season');
       let episodeInput = document.getElementById('episode');
@@ -214,6 +218,27 @@
       const backArrow = document.getElementById('back-arrow');
       backArrow.disabled = (season === 1 && episode === 1);
     }
+
+    function loadVideoInIframe(url) {
+  const iframe = document.getElementById('video-frame');
+  const container = document.getElementById('video-container');
+
+  // Mostra il container se nascosto
+  container.style.display = 'block';
+
+  // Blocca tentativi di window.open all'interno dell'iframe
+  const originalOpen = window.open;
+  window.open = function() {
+    console.log("Tentativo di popup bloccato");
+    return null;
+  };
+  setTimeout(() => {
+    window.open = originalOpen;
+  }, 1000);
+
+  // Carica il video
+  iframe.src = url;
+}
   </script>
 </body>
 </html>
