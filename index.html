@@ -9,181 +9,116 @@
   <title>Film 4 Fra</title>
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #f1f1f1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      margin: 0; font-family: Arial, sans-serif;
+      background-color: #121212; color: #f1f1f1;
+      display: flex; flex-direction: column;
+      align-items: center; padding: 20px;
     }
-
     .container {
       background-color: #1e1e1e;
-      max-width: 500px;
-      width: 100%;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      max-width: 500px; width: 100%;
+      padding: 30px; border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
       margin-bottom: 30px;
     }
-
-    h1 {
-      font-size: 32px;
-      text-align: center;
-    }
-
+    h1 { font-size: 32px; text-align: center; }
     .emoji-title::before, .emoji-title::after {
-      content: '⚡';
-      margin: 0 10px;
+      content: '⚡'; margin: 0 10px;
     }
-
     .tabs {
-      display: flex;
-      justify-content: space-between;
+      display: flex; justify-content: space-between;
       margin-bottom: 20px;
     }
-
     .tab-button {
-      flex: 1;
-      padding: 12px;
-      cursor: pointer;
-      background: #333;
-      color: #ccc;
-      border: none;
-      font-weight: bold;
-      border-radius: 10px 10px 0 0;
+      flex: 1; padding: 12px; cursor: pointer;
+      background: #333; color: #ccc; border: none;
+      font-weight: bold; border-radius: 10px 10px 0 0;
       transition: background 0.3s, color 0.3s;
     }
-
     .tab-button.active {
-      background: #d4a017;
-      color: #000;
+      background: #d4a017; color: #000;
       border-bottom: 2px solid #1e1e1e;
     }
-
-    .form-section {
-      display: none;
-    }
-
-    .form-section.active {
-      display: block;
-    }
-
+    .form-section { display: none; }
+    .form-section.active { display: block; }
     .form-group {
-      margin: 15px 0;
-      text-align: left;
+      margin: 15px 0; text-align: left;
     }
-
     label {
-      display: block;
-      font-weight: bold;
+      display: block; font-weight: bold;
       margin-bottom: 5px;
     }
-
     .form-group input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #555;
-      background-color: #2a2a2a;
-      color: #f1f1f1;
+      width: 100%; padding: 10px;
+      border-radius: 6px; border: 1px solid #555;
+      background-color: #2a2a2a; color: #f1f1f1;
       font-size: 16px;
     }
-
     button.watch {
-      margin-top: 20px;
-      padding: 10px 25px;
-      font-size: 16px;
-      background-color: #d4a017;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
+      margin-top: 20px; padding: 10px 25px;
+      font-size: 16px; background-color: #d4a017;
+      color: #000; border: none; border-radius: 8px;
+      cursor: pointer; width: 100%;
+      /* aggiunta per evitare submit implicito */
+      type: button;
     }
-
     .nav-arrows {
-      display: flex;
-      justify-content: space-between;
+      display: flex; justify-content: space-between;
       margin-top: 20px;
     }
-
     .arrow-button {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: #f1f1f1;
+      background: none; border: none;
+      font-size: 24px; cursor: pointer;
+      color: #f1f1f1; type: button;
     }
-
     .arrow-button:disabled {
-      color: #555;
-      cursor: not-allowed;
+      color: #555; cursor: not-allowed;
     }
-
     .choose-link {
-      display: inline-block;
-      margin-bottom: 20px;
-      background-color: #333;
-      color: #f1f1f1;
-      padding: 10px 16px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+      display: inline-block; margin-bottom: 20px;
+      background-color: #333; color: #f1f1f1;
+      padding: 10px 16px; border-radius: 8px;
+      text-decoration: none; font-weight: bold;
     }
-
     #video-container {
-      width: 100%;
-      max-width: 800px;
-      aspect-ratio: 16 / 9;
-      display: none;
-      border-radius: 16px;
-      overflow: hidden;
+      width: 100%; max-width: 800px;
+      aspect-ratio: 16/9; display: none;
+      border-radius: 16px; overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
-
     #video-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
+      width: 100%; height: 100%; border: none;
     }
-
     @media (max-width: 600px) {
-      .tab-button {
-        font-size: 14px;
-        padding: 10px;
-      }
+      .tab-button { font-size: 14px; padding: 10px; }
     }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h1 class="emoji-title">Film4Fra</h1>
+
     <div class="tabs">
-      <button class="tab-button active" onclick="switchTab('film', event)">Film</button>
-      <button class="tab-button" onclick="switchTab('serie', event)">Serie</button>
+      <button class="tab-button active" onclick="switchTab('film', event)" type="button">Film</button>
+      <button class="tab-button" onclick="switchTab('serie', event)" type="button">Serie</button>
     </div>
 
     <div id="film" class="form-section active">
       <a class="choose-link" href="https://www.themoviedb.org/movie?language=it-IT" target="_blank">Scegli un film</a>
       <div class="form-group">
-        <label for="film-code">Quale è il codice film?</label>
+        <label for="film-code">Qual è il codice film?</label>
         <input type="text" id="film-code">
       </div>
-      <button class="watch" onclick="watchMovie()">Guarda</button>
+      <button class="watch" onclick="watchMovie()" type="button">Guarda</button>
     </div>
 
     <div id="serie" class="form-section">
       <a class="choose-link" href="https://www.themoviedb.org/tv?language=it-IT" target="_blank">Scegli una serie</a>
       <div class="form-group">
-        <label for="serie-code">Quale è la serie che vuoi vedere?</label>
+        <label for="serie-code">Qual è la serie?</label>
         <input type="text" id="serie-code">
       </div>
       <div class="form-group">
@@ -194,14 +129,14 @@
         <label for="episode">Episodio</label>
         <input type="number" id="episode" value="1" min="1">
       </div>
-      <button class="watch" onclick="watchSeries()">Guarda</button>
+      <button class="watch" onclick="watchSeries()" type="button">Guarda</button>
       <div class="nav-arrows">
-        <button id="back-arrow" class="arrow-button" onclick="navigateEpisode(-1)">&#8592;</button>
-        <button id="forward-arrow" class="arrow-button" onclick="navigateEpisode(1)">&#8594;</button>
+        <button id="back-arrow" class="arrow-button" onclick="navigateEpisode(-1)" type="button">&#8592;</button>
+        <button id="forward-arrow" class="arrow-button" onclick="navigateEpisode(1)" type="button">&#8594;</button>
       </div>
     </div>
 
-    <button id="cast-button" class="watch" style="margin-top:10px;">📺 Trasmetti su TV</button>
+    <button id="cast-button" class="watch" style="margin-top:10px;" type="button">📺 Trasmetti su TV</button>
   </div>
 
   <div id="video-container">
@@ -210,49 +145,42 @@
 
   <script>
     let currentTab = 'film';
-
     function switchTab(tab, event) {
       currentTab = tab;
-      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
       document.getElementById(tab).classList.add('active');
-      event.target.classList.add('active');
+      if (event && event.target) event.target.classList.add('active');
     }
 
     function watchMovie() {
       const code = document.getElementById('film-code').value.trim();
-      if (code) {
-        const url = `https://vixsrc.to/movie/${code}`;
-        loadVideoInIframe(url);
-      }
+      if (code) loadVideoInIframe(`https://vixsrc.to/movie/${code}`);
     }
 
     function watchSeries() {
       const code = document.getElementById('serie-code').value.trim();
-      const season = parseInt(document.getElementById('season').value);
-      const episode = parseInt(document.getElementById('episode').value);
+      const season = +document.getElementById('season').value;
+      const episode = +document.getElementById('episode').value;
       if (code && season > 0 && episode > 0) {
-        const url = `https://vixsrc.to/tv/${code}/${season}/${episode}`;
-        loadVideoInIframe(url);
+        loadVideoInIframe(`https://vixsrc.to/tv/${code}/${season}/${episode}`);
         updateArrowStatus(season, episode);
       }
     }
 
-    function navigateEpisode(direction) {
-      let seasonInput = document.getElementById('season');
-      let episodeInput = document.getElementById('episode');
-      let episode = parseInt(episodeInput.value);
-      let season = parseInt(seasonInput.value);
-      if (direction === -1 && (season === 1 && episode === 1)) return;
-      episode += direction;
-      if (episode < 1) episode = 1;
-      episodeInput.value = episode;
-      watchSeries();
+    function navigateEpisode(dir) {
+      const s = document.getElementById('season');
+      const e = document.getElementById('episode');
+      let season = +s.value, episode = +e.value;
+      if (!(dir === -1 && season === 1 && episode === 1)) {
+        episode = Math.max(1, episode + dir);
+        e.value = episode;
+        watchSeries();
+      }
     }
 
     function updateArrowStatus(season, episode) {
-      const backArrow = document.getElementById('back-arrow');
-      backArrow.disabled = (season === 1 && episode === 1);
+      document.getElementById('back-arrow').disabled = (season === 1 && episode === 1);
     }
 
     function loadVideoInIframe(url) {
@@ -260,7 +188,7 @@
       const container = document.getElementById('video-container');
       container.style.display = 'block';
 
-      // Blocca popup temporaneamente
+      // blocco temporaneo di window.open
       const originalOpen = window.open;
       window.open = () => null;
       setTimeout(() => window.open = originalOpen, 1500);
@@ -268,73 +196,50 @@
       iframe.src = url;
     }
 
-    // Chromecast
-    window['__onGCastApiAvailable'] = function(isAvailable) {
-      if (isAvailable) {
+    // Chromecast initialization
+    window['__onGCastApiAvailable'] = function(avail) {
+      if (avail) {
         cast.framework.CastContext.getInstance().setOptions({
           receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
           autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
         });
       }
     };
-
     document.getElementById('cast-button').addEventListener('click', () => {
       const videoUrl = document.getElementById('video-frame').src;
       if (!videoUrl) return alert("Nessun contenuto da trasmettere.");
-      const context = cast.framework.CastContext.getInstance();
-      context.requestSession().then(() => {
-        const session = context.getCurrentSession();
-        const mediaInfo = new chrome.cast.media.MediaInfo(videoUrl, 'video/mp4');
-        const request = new chrome.cast.media.LoadRequest(mediaInfo);
-        session.loadMedia(request).catch(err => {
-          console.error("Errore nel caricamento Cast:", err);
-          alert("❌ Contenuto non castabile.");
-        });
-      });
+      const ctx = cast.framework.CastContext.getInstance();
+      ctx.requestSession().then(() => {
+        const sess = ctx.getCurrentSession();
+        const mi = new chrome.cast.media.MediaInfo(videoUrl, 'video/mp4');
+        const req = new chrome.cast.media.LoadRequest(mi);
+        sess.loadMedia(req).catch(() => alert("❌ Contenuto non castabile."));
+      }).catch(() => {/* dismiss */});
     });
 
-    // Protezione Anti-Popup avanzata
-    (function() {
+    // Protezione Anti-Popup avanzata (solo window.open)
+    (function(){
       const noop = () => null;
       const originalOpen = window.open;
-      const originalLocation = window.location;
-
-      function blockPopupsTemporaneamente() {
+      function blockPopupsOnce() {
         window.open = noop;
-        try {
-          Object.defineProperty(window, 'location', {
-            configurable: true,
-            get: () => originalLocation,
-            set: noop
-          });
-        } catch (e) {}
-        setTimeout(() => {
-          window.open = originalOpen;
-          delete window.location;
-          window.location = originalLocation;
-        }, 1500);
+        setTimeout(() => window.open = originalOpen, 1500);
       }
-
-      ['click', 'pointerdown', 'touchstart'].forEach(evt => {
-        document.addEventListener(evt, blockPopupsTemporaneamente, { once: true, capture: true });
+      ['click','pointerdown','touchstart'].forEach(evt => {
+        document.addEventListener(evt, blockPopupsOnce, { once:true, capture:true });
       });
 
-      // Blocca iframe/script sospetti
+      // rimuove iframe/script sospetti
       const style = document.createElement('style');
-      style.innerHTML = `iframe:not(#video-frame):not([allowfullscreen]) { display: none !important; pointer-events: none !important; }`;
+      style.textContent = `iframe:not(#video-frame):not([allowfullscreen]){display:none!important;pointer-events:none!important;}`;
       document.head.appendChild(style);
-
-      const observer = new MutationObserver(mutations => {
-        for (const m of mutations) {
-          m.addedNodes.forEach(node => {
-            if (['IFRAME', 'SCRIPT'].includes(node.tagName) && !node.id?.includes('video-frame')) {
-              node.remove();
-            }
-          });
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
+      new MutationObserver(muts => {
+        muts.forEach(m => m.addedNodes.forEach(n => {
+          if ((n.tagName==='IFRAME'||n.tagName==='SCRIPT') && !n.id?.includes('video-frame')) n.remove();
+        }));
+      }).observe(document.body, { childList:true, subtree:true });
     })();
   </script>
+
 </body>
 </html>
