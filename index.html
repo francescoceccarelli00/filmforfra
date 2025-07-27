@@ -7,40 +7,49 @@
   <meta property="og:description" content="Scegli film o serie e guarda subito ciò che vuoi!">
   <meta property="og:image" content="https://static.vecteezy.com/system/resources/previews/011/508/381/original/movie-film-banner-design-template-cinema-background-concept-cinema-concept-with-popcorn-filmstrip-and-film-clapper-on-yellow-background-illustration-free-vector.jpg">
   <title>Film 4 Fra</title>
+  <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #121212;
       color: #f1f1f1;
-      text-align: center;
-      min-height: 100vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      padding: 20px;
     }
+
     .container {
       background-color: #1e1e1e;
       max-width: 500px;
-      width: 90%;
+      width: 100%;
       padding: 30px;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-      box-sizing: border-box;
+      margin-bottom: 30px;
     }
+
     h1 {
       font-size: 32px;
-      color: #f1f1f1;
+      text-align: center;
     }
+
     .emoji-title::before, .emoji-title::after {
       content: '⚡';
       margin: 0 10px;
     }
+
     .tabs {
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
     }
+
     .tab-button {
       flex: 1;
       padding: 12px;
@@ -52,29 +61,33 @@
       border-radius: 10px 10px 0 0;
       transition: background 0.3s, color 0.3s;
     }
+
     .tab-button.active {
       background: #d4a017;
       color: #000;
       border-bottom: 2px solid #1e1e1e;
     }
+
     .form-section {
       display: none;
     }
+
     .form-section.active {
       display: block;
     }
+
     .form-group {
       margin: 15px 0;
       text-align: left;
     }
+
     label {
       display: block;
       font-weight: bold;
       margin-bottom: 5px;
-      color: #f1f1f1;
     }
+
     .form-group input {
-      box-sizing: border-box;
       width: 100%;
       padding: 10px;
       border-radius: 6px;
@@ -83,6 +96,7 @@
       color: #f1f1f1;
       font-size: 16px;
     }
+
     button.watch {
       margin-top: 20px;
       padding: 10px 25px;
@@ -94,11 +108,13 @@
       cursor: pointer;
       width: 100%;
     }
+
     .nav-arrows {
       display: flex;
       justify-content: space-between;
       margin-top: 20px;
     }
+
     .arrow-button {
       background: none;
       border: none;
@@ -106,10 +122,12 @@
       cursor: pointer;
       color: #f1f1f1;
     }
+
     .arrow-button:disabled {
       color: #555;
       cursor: not-allowed;
     }
+
     .choose-link {
       display: inline-block;
       margin-bottom: 20px;
@@ -120,6 +138,23 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    #video-container {
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      display: none;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+
+    #video-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     @media (max-width: 600px) {
       .tab-button {
         font-size: 14px;
@@ -132,8 +167,8 @@
   <div class="container">
     <h1 class="emoji-title">Film4Fra</h1>
     <div class="tabs">
-      <button class="tab-button active" onclick="switchTab('film')">Film</button>
-      <button class="tab-button" onclick="switchTab('serie')">Serie</button>
+      <button class="tab-button active" onclick="switchTab('film', event)">Film</button>
+      <button class="tab-button" onclick="switchTab('serie', event)">Serie</button>
     </div>
 
     <div id="film" class="form-section active">
@@ -165,41 +200,44 @@
         <button id="forward-arrow" class="arrow-button" onclick="navigateEpisode(1)">&#8594;</button>
       </div>
     </div>
+
+    <button id="cast-button" class="watch" style="margin-top:10px;">📺 Trasmetti su TV</button>
   </div>
 
-  <div id="video-container" style="width: 90%; max-width: 800px; aspect-ratio: 16 / 9; margin-top: 30px; border-radius: 16px; overflow: hidden; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.6);">
-  <iframe id="video-frame" src="" frameborder="0" allowfullscreen style="width: 100%; height: 100%;"></iframe>
-</div>
-  
+  <div id="video-container">
+    <iframe id="video-frame" allowfullscreen></iframe>
+  </div>
+
   <script>
     let currentTab = 'film';
 
-    function switchTab(tab) {
+    function switchTab(tab, event) {
       currentTab = tab;
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
-      document.querySelector(`#${tab}`).classList.add('active');
+      document.getElementById(tab).classList.add('active');
       event.target.classList.add('active');
     }
 
-function watchMovie() {
-  const code = document.getElementById('film-code').value.trim();
-  if (code) {
-    const url = `https://vixsrc.to/movie/${code}`;
-    loadVideoInIframe(url);
-  }
-}
+    function watchMovie() {
+      const code = document.getElementById('film-code').value.trim();
+      if (code) {
+        const url = `https://vixsrc.to/movie/${code}`;
+        loadVideoInIframe(url);
+      }
+    }
 
-function watchSeries() {
-  const code = document.getElementById('serie-code').value.trim();
-  const season = parseInt(document.getElementById('season').value);
-  const episode = parseInt(document.getElementById('episode').value);
-  if (code && season > 0 && episode > 0) {
-    const url = `https://vixsrc.to/tv/${code}/${season}/${episode}`;
-    loadVideoInIframe(url);
-    updateArrowStatus(season, episode);
-  }
-}
+    function watchSeries() {
+      const code = document.getElementById('serie-code').value.trim();
+      const season = parseInt(document.getElementById('season').value);
+      const episode = parseInt(document.getElementById('episode').value);
+      if (code && season > 0 && episode > 0) {
+        const url = `https://vixsrc.to/tv/${code}/${season}/${episode}`;
+        loadVideoInIframe(url);
+        updateArrowStatus(season, episode);
+      }
+    }
+
     function navigateEpisode(direction) {
       let seasonInput = document.getElementById('season');
       let episodeInput = document.getElementById('episode');
@@ -207,9 +245,7 @@ function watchSeries() {
       let season = parseInt(seasonInput.value);
       if (direction === -1 && (season === 1 && episode === 1)) return;
       episode += direction;
-      if (episode < 1) {
-        episode = 1;
-      }
+      if (episode < 1) episode = 1;
       episodeInput.value = episode;
       watchSeries();
     }
@@ -220,25 +256,85 @@ function watchSeries() {
     }
 
     function loadVideoInIframe(url) {
-  const iframe = document.getElementById('video-frame');
-  const container = document.getElementById('video-container');
+      const iframe = document.getElementById('video-frame');
+      const container = document.getElementById('video-container');
+      container.style.display = 'block';
 
-  // Mostra il container se nascosto
-  container.style.display = 'block';
+      // Blocca popup temporaneamente
+      const originalOpen = window.open;
+      window.open = () => null;
+      setTimeout(() => window.open = originalOpen, 1500);
 
-  // Blocca tentativi di window.open all'interno dell'iframe
-  const originalOpen = window.open;
-  window.open = function() {
-    console.log("Tentativo di popup bloccato");
-    return null;
-  };
-  setTimeout(() => {
-    window.open = originalOpen;
-  }, 1000);
+      iframe.src = url;
+    }
 
-  // Carica il video
-  iframe.src = url;
-}
+    // Chromecast
+    window['__onGCastApiAvailable'] = function(isAvailable) {
+      if (isAvailable) {
+        cast.framework.CastContext.getInstance().setOptions({
+          receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+          autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+        });
+      }
+    };
+
+    document.getElementById('cast-button').addEventListener('click', () => {
+      const videoUrl = document.getElementById('video-frame').src;
+      if (!videoUrl) return alert("Nessun contenuto da trasmettere.");
+      const context = cast.framework.CastContext.getInstance();
+      context.requestSession().then(() => {
+        const session = context.getCurrentSession();
+        const mediaInfo = new chrome.cast.media.MediaInfo(videoUrl, 'video/mp4');
+        const request = new chrome.cast.media.LoadRequest(mediaInfo);
+        session.loadMedia(request).catch(err => {
+          console.error("Errore nel caricamento Cast:", err);
+          alert("❌ Contenuto non castabile.");
+        });
+      });
+    });
+
+    // Protezione Anti-Popup avanzata
+    (function() {
+      const noop = () => null;
+      const originalOpen = window.open;
+      const originalLocation = window.location;
+
+      function blockPopupsTemporaneamente() {
+        window.open = noop;
+        try {
+          Object.defineProperty(window, 'location', {
+            configurable: true,
+            get: () => originalLocation,
+            set: noop
+          });
+        } catch (e) {}
+        setTimeout(() => {
+          window.open = originalOpen;
+          delete window.location;
+          window.location = originalLocation;
+        }, 1500);
+      }
+
+      ['click', 'pointerdown', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, blockPopupsTemporaneamente, { once: true, capture: true });
+      });
+
+      // Blocca iframe/script sospetti
+      const style = document.createElement('style');
+      style.innerHTML = `iframe:not(#video-frame):not([allowfullscreen]) { display: none !important; pointer-events: none !important; }`;
+      document.head.appendChild(style);
+
+      const observer = new MutationObserver(mutations => {
+        for (const m of mutations) {
+          m.addedNodes.forEach(node => {
+            if (['IFRAME', 'SCRIPT'].includes(node.tagName) && !node.id?.includes('video-frame')) {
+              node.remove();
+            }
+          });
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    })();
   </script>
 </body>
 </html>
