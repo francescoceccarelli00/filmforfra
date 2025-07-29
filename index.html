@@ -135,8 +135,6 @@
         <button id="forward-arrow" class="arrow-button" onclick="navigateEpisode(1)" type="button">&#8594;</button>
       </div>
     </div>
-
-    <button id="cast-button" class="watch" style="margin-top:10px;" type="button">📺 Trasmetti su TV</button>
   </div>
 
   <div id="video-container">
@@ -195,50 +193,6 @@
 
       iframe.src = url;
     }
-
-    // Chromecast initialization
-    window['__onGCastApiAvailable'] = function(avail) {
-      if (avail) {
-        cast.framework.CastContext.getInstance().setOptions({
-          receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-          autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-        });
-      }
-    };
-    document.getElementById('cast-button').addEventListener('click', () => {
-      const videoUrl = document.getElementById('video-frame').src;
-      if (!videoUrl) return alert("Nessun contenuto da trasmettere.");
-      const ctx = cast.framework.CastContext.getInstance();
-      ctx.requestSession().then(() => {
-        const sess = ctx.getCurrentSession();
-        const mi = new chrome.cast.media.MediaInfo(videoUrl, 'video/mp4');
-        const req = new chrome.cast.media.LoadRequest(mi);
-        sess.loadMedia(req).catch(() => alert("❌ Contenuto non castabile."));
-      }).catch(() => {/* dismiss */});
-    });
-
-    // Protezione Anti-Popup avanzata (solo window.open)
-    (function(){
-      const noop = () => null;
-      const originalOpen = window.open;
-      function blockPopupsOnce() {
-        window.open = noop;
-        setTimeout(() => window.open = originalOpen, 1500);
-      }
-      ['click','pointerdown','touchstart'].forEach(evt => {
-        document.addEventListener(evt, blockPopupsOnce, { once:true, capture:true });
-      });
-
-      // rimuove iframe/script sospetti
-      const style = document.createElement('style');
-      style.textContent = `iframe:not(#video-frame):not([allowfullscreen]){display:none!important;pointer-events:none!important;}`;
-      document.head.appendChild(style);
-      new MutationObserver(muts => {
-        muts.forEach(m => m.addedNodes.forEach(n => {
-          if ((n.tagName==='IFRAME'||n.tagName==='SCRIPT') && !n.id?.includes('video-frame')) n.remove();
-        }));
-      }).observe(document.body, { childList:true, subtree:true });
-    })();
   </script>
 
 </body>
