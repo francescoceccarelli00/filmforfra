@@ -577,7 +577,7 @@ google-cast-launcher {
   border-left: 1px solid var(--border);
   box-shadow: -24px 0 40px var(--shadow);
   transform: translateX(100%);
-  transition: transform 0.28s ease;
+  transition: transform 0.35s cubic-bezier(0.32, 0, 0.15, 1);
   display: flex;
   flex-direction: column;
   padding: 28px;
@@ -705,6 +705,61 @@ footer {
   min-height: calc((var(--catalog-card-min-height) * 2) + var(--catalog-grid-gap) + 6px);
   max-height: calc((var(--catalog-card-min-height) * 2) + var(--catalog-grid-gap) + 6px);
   overflow: hidden;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Sticky pager bar (visible on mobile, hidden on desktop) ── */
+
+/* Desktop: inline pager bar */
+.catalog-pager-bar {
+  display: none;
+}
+
+@media (max-width: 840px) {
+  /* Mobile: sticky pager bar */
+  .catalog-pager-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 16px;
+    flex-shrink: 0;
+  }
+}
+
+.pager-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  padding: 10px 14px;
+  border-radius: 1px;
+  min-height: 44px;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.pager-btn:hover:not(:disabled) {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+}
+
+.pager-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pager-info {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  flex: 1;
 }
 
 .catalog-grid {
@@ -922,32 +977,85 @@ footer {
     grid-column: span 2;
   }
 
+  /* ── Mobile: bottom sheet ── */
   .catalog-panel {
-    top: 2.5vh;
-    right: 2.5vw;
-    left: 2.5vw;
-    bottom: 2.5vh;
-    width: auto;
-    height: auto;
-    border: 1px solid var(--border);
-    transform: translateY(4%);
-    border-radius: 8px;
-    padding: 20px;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 95dvh;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -16px 40px var(--shadow);
+    transform: translateY(100%);
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* drag handle pill */
+  .catalog-panel::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 40px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 12px auto 0;
   }
 
   .catalog-shell.open .catalog-panel {
     transform: translateY(0);
   }
 
+  /* Scrollable inner area: filters + toolbar + feedback */
+  .catalog-panel-scroll {
+    flex-shrink: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 0 16px 12px;
+    max-height: 25dvh; /* leaves room for grid below */
+  }
+
+  .catalog-header {
+    padding-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Pager bar: fixed between scroll area and grid */
+  .catalog-pager-bar {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  /* Grid takes remaining space and scrolls independently */
   .catalog-grid-shell {
-    min-height: min(56vh, 980px);
-    max-height: min(56vh, 980px);
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .catalog-grid {
+    height: auto;
+    overflow: visible;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     grid-auto-rows: minmax(320px, auto);
+    padding: 12px 16px 24px;
+  }
+
+  .catalog-toolbar {
+    gap: 10px;
   }
 }
 
@@ -963,14 +1071,16 @@ footer {
     width: 100%;
   }
 
-  .catalog-header {
-    align-items: center;
-  }
-
   .catalog-close {
-    padding: 8px 12px;
-    font-size: 20px;
+    /* larger tap target on mobile */
+    padding: 10px 14px;
+    font-size: 22px;
     line-height: 1;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .catalog-provider-chip {
@@ -978,14 +1088,30 @@ footer {
     letter-spacing: 0.04em;
   }
 
-  .catalog-grid-shell {
-    min-height: min(58vh, 980px);
-    max-height: min(58vh, 980px);
-  }
-
   .catalog-grid {
     grid-template-columns: 1fr 1fr;
-    grid-auto-rows: minmax(280px, auto);
+    grid-auto-rows: minmax(240px, auto);
+    gap: 10px;
+  }
+
+  .pager-btn {
+    font-size: 10px;
+    padding: 10px 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .catalog-filters {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .catalog-toolbar {
+    gap: 8px;
+  }
+
+  .catalog-actions-inline {
+    flex-direction: column;
   }
 
   .toast {
@@ -994,4 +1120,15 @@ footer {
     max-width: none;
     bottom: 16px;
   }
+}
+
+/* Ensure flyout never opens by default — safety reset */
+.catalog-shell:not(.open) {
+  pointer-events: none;
+}
+.catalog-shell:not(.open) .catalog-panel {
+  visibility: hidden;
+}
+.catalog-shell.open .catalog-panel {
+  visibility: visible;
 }

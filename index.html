@@ -108,6 +108,7 @@
     <button id="catalog-backdrop" class="catalog-backdrop" type="button" aria-label="Chiudi catalogo"></button>
 
     <section class="catalog-panel" role="dialog" aria-modal="true" aria-labelledby="catalog-title">
+      <div class="catalog-panel-scroll">
       <div class="catalog-header">
         <div>
           <p class="catalog-kicker">Catalogo integrato</p>
@@ -173,22 +174,22 @@
           <button id="catalog-apply" class="catalog-action-btn" type="button">Applica filtri</button>
           <button id="catalog-reset" class="catalog-action-btn ghost" type="button">Reset</button>
         </div>
-        <div class="catalog-meta">
-          <span id="catalog-page-info">Pagina 1</span>
-        </div>
-        <div class="catalog-pagination">
-          <button id="catalog-prev" class="arrow-btn" type="button">&#8592; Pagina prec.</button>
-          <button id="catalog-next" class="arrow-btn" type="button">Pagina succ. &#8594;</button>
+        <!-- Pager bar inline su desktop, sticky su mobile -->
+        <div class="catalog-pager-bar">
+          <button id="catalog-prev" class="pager-btn" type="button">&#8592; Prec.</button>
+          <span id="catalog-page-info" class="pager-info">Pagina 1</span>
+          <button id="catalog-next" class="pager-btn" type="button">Succ. &#8594;</button>
         </div>
       </div>
 
       <div id="catalog-feedback" class="catalog-feedback" aria-live="polite"></div>
+      </div><!-- /.catalog-panel-scroll -->
+
+      
 
       <div class="catalog-grid-shell">
         <div id="catalog-grid" class="catalog-grid"></div>
       </div>
-
-      
     </section>
   </aside>
 

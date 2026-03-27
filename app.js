@@ -161,7 +161,49 @@ function initEvents() {
     }
   });
 
+  // Swipe-down to close on mobile
+  initSwipeToClose();
+
   window.addEventListener('message', handlePlayerMessage);
+}
+
+function initSwipeToClose() {
+  const panel = document.querySelector('.catalog-panel');
+  if (!panel) return;
+
+  let startY = 0;
+  let isDragging = false;
+
+  panel.addEventListener('touchstart', (e) => {
+    // Only trigger if touch starts near the top handle area (first 60px)
+    const scrollEl = panel.querySelector('.catalog-panel-scroll');
+    const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+    if (scrollTop > 10) return; // Don't hijack when scrolled down
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }, { passive: true });
+
+  panel.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const deltaY = e.touches[0].clientY - startY;
+    if (deltaY > 0) {
+      // Dragging down - apply transform for visual feedback
+      panel.style.transform = `translateY(${Math.min(deltaY, 200)}px)`;
+      panel.style.transition = 'none';
+    }
+  }, { passive: true });
+
+  panel.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const deltaY = e.changedTouches[0].clientY - startY;
+    panel.style.transform = '';
+    panel.style.transition = '';
+
+    if (deltaY > 80) {
+      closeCatalog();
+    }
+  }, { passive: true });
 }
 
 async function init() {
@@ -169,6 +211,9 @@ async function init() {
   initEvents();
   updateEpisodeBackButton();
   renderProviderFilter();
+
+  // Guarantee catalog is closed on load (prevents mobile auto-open bug)
+  closeCatalog();
 
   initCastUI();
 
@@ -432,6 +477,11 @@ function closeCatalog() {
   document.body.classList.remove('catalog-open');
   dom.catalogShell.classList.remove('open');
   dom.catalogShell.setAttribute('aria-hidden', 'true');
+
+  // Return focus to body so screen readers / iOS don't get stuck inside
+  if (dom.catalogShell.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
 }
 
 function syncCatalogFiltersToDom() {
@@ -570,7 +620,7 @@ async function fetchAndRenderCatalog() {
       return;
     }
 
-    setCatalogFeedback(`Risultati caricati: ${items.length} elementi nella pagina ${state.catalogPage}. Vista: 8 card per volta con scroll.`);
+    setCatalogFeedback(`${items.length} elementi nella pagina ${state.catalogPage}`);
   } catch (error) {
     console.error(error);
     renderCatalogError('Impossibile caricare il catalogo TMDB. Controlla token, rete o CORS del browser.');
