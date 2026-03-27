@@ -4,196 +4,198 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="Film 4 Fra">
-  <meta property="og:description" content="Scegli film o serie e guarda subito ciò che vuoi!">
+  <meta property="og:description" content="Scegli film o serie, apri il catalogo TMDB e guarda subito ciò che vuoi!">
   <meta property="og:image" content="https://static.vecteezy.com/system/resources/previews/011/508/381/original/movie-film-banner-design-template-cinema-background-concept-cinema-concept-with-popcorn-filmstrip-and-film-clapper-on-yellow-background-illustration-free-vector.jpg">
   <title>Film 4 Fra</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: Arial, sans-serif;
-      background-color: #121212; color: #f1f1f1;
-      display: flex; flex-direction: column;
-      align-items: center; padding: 20px;
-    }
-    .container {
-      background-color: #1e1e1e;
-      max-width: 500px; width: 100%;
-      padding: 30px; border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-      margin-bottom: 30px;
-    }
-    h1 { font-size: 32px; text-align: center; }
-    .emoji-title::before, .emoji-title::after {
-      content: '⚡'; margin: 0 10px;
-    }
-    .tabs {
-      display: flex; justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .tab-button {
-      flex: 1; padding: 12px; cursor: pointer;
-      background: #333; color: #ccc; border: none;
-      font-weight: bold; border-radius: 10px 10px 0 0;
-      transition: background 0.3s, color 0.3s;
-    }
-    .tab-button.active {
-      background: #d4a017; color: #000;
-      border-bottom: 2px solid #1e1e1e;
-    }
-    .form-section { display: none; }
-    .form-section.active { display: block; }
-    .form-group {
-      margin: 15px 0; text-align: left;
-    }
-    label {
-      display: block; font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .form-group input {
-      width: 100%; padding: 10px;
-      border-radius: 6px; border: 1px solid #555;
-      background-color: #2a2a2a; color: #f1f1f1;
-      font-size: 16px;
-    }
-    button.watch {
-      margin-top: 20px; padding: 10px 25px;
-      font-size: 16px; background-color: #d4a017;
-      color: #000; border: none; border-radius: 8px;
-      cursor: pointer; width: 100%;
-      /* aggiunta per evitare submit implicito */
-      type: button;
-    }
-    .nav-arrows {
-      display: flex; justify-content: space-between;
-      margin-top: 20px;
-    }
-    .arrow-button {
-      background: none; border: none;
-      font-size: 24px; cursor: pointer;
-      color: #f1f1f1; type: button;
-    }
-    .arrow-button:disabled {
-      color: #555; cursor: not-allowed;
-    }
-    .choose-link {
-      display: inline-block; margin-bottom: 20px;
-      background-color: #333; color: #f1f1f1;
-      padding: 10px 16px; border-radius: 8px;
-      text-decoration: none; font-weight: bold;
-    }
-    #video-container {
-      width: 100%; max-width: 800px;
-      aspect-ratio: 16/9; display: none;
-      border-radius: 16px; overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    }
-    #video-frame {
-      width: 100%; height: 100%; border: none;
-    }
-    @media (max-width: 600px) {
-      .tab-button { font-size: 14px; padding: 10px; }
-    }
-  </style>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+  <div class="film-strip"></div>
 
-  <div class="container">
-    <h1 class="emoji-title">Film4Fra</h1>
+  <header>
+    <p class="logo-eyebrow">Streaming privato</p>
+    <h1>Film<span>4Fra</span></h1>
+    <div class="logo-rule"><div class="logo-rule-dot"></div></div>
+  </header>
 
-    <div class="tabs">
-      <button class="tab-button active" onclick="switchTab('film', event)" type="button">Film</button>
-      <button class="tab-button" onclick="switchTab('serie', event)" type="button">Serie</button>
+  <main class="layout-shell">
+    <div class="card">
+      <div class="tabs" role="tablist" aria-label="Selezione tipo contenuto">
+        <button id="tab-film" class="tab-btn active" data-tab="film" type="button" role="tab" aria-selected="true" aria-controls="panel-film">&#9632; Film</button>
+        <button id="tab-serie" class="tab-btn" data-tab="serie" type="button" role="tab" aria-selected="false" aria-controls="panel-serie">&#9632; Serie</button>
+      </div>
+
+      <section id="panel-film" class="panel active" role="tabpanel" aria-labelledby="tab-film">
+        <div class="panel-actions">
+          <a class="choose-link" href="https://www.themoviedb.org/movie?language=it-IT" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1h5v5M11 1L6 6M2 3H1v8h8V9"/></svg>
+            Sfoglia film
+          </a>
+          <button class="catalog-btn" type="button" data-open-catalog="movie">
+            Apri catalogo
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="film-code">Codice TMDB</label>
+          <input type="text" id="film-code" placeholder="es. 550" inputmode="numeric" autocomplete="off">
+        </div>
+
+        <button class="watch-btn" id="watch-film" type="button">
+          <span>&#9654; Guarda ora</span>
+        </button>
+      </section>
+
+      <section id="panel-serie" class="panel" role="tabpanel" aria-labelledby="tab-serie" hidden>
+        <div class="panel-actions">
+          <a class="choose-link" href="https://www.themoviedb.org/tv?language=it-IT" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1h5v5M11 1L6 6M2 3H1v8h8V9"/></svg>
+            Sfoglia serie
+          </a>
+          <button class="catalog-btn" type="button" data-open-catalog="tv">
+            Apri catalogo
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="serie-code">Codice serie TMDB</label>
+          <input type="text" id="serie-code" placeholder="es. 1399" inputmode="numeric" autocomplete="off">
+        </div>
+
+        <div class="episode-row">
+          <div class="field">
+            <label for="season">Stagione</label>
+            <input type="number" id="season" value="1" min="1">
+          </div>
+          <div class="field">
+            <label for="episode">Episodio</label>
+            <input type="number" id="episode" value="1" min="1">
+          </div>
+        </div>
+
+        <button class="watch-btn" id="watch-serie" type="button">
+          <span>&#9654; Guarda ora</span>
+        </button>
+
+        <div class="nav-row">
+          <button id="back-arrow" class="arrow-btn" type="button" disabled>&#8592; Prec.</button>
+          <button id="forward-arrow" class="arrow-btn" type="button">Succ. &#8594;</button>
+        </div>
+      </section>
     </div>
 
-    <div id="film" class="form-section active">
-      <a class="choose-link" href="https://www.themoviedb.org/movie?language=it-IT" target="_blank">Scegli un film</a>
-      <div class="form-group">
-        <label for="film-code">Qual è il codice film?</label>
-        <input type="text" id="film-code">
+    <section id="video-container" aria-live="polite">
+      <div class="video-label">In riproduzione</div>
+      <div id="video-wrapper" tabindex="-1">
+        <iframe
+          id="video-frame"
+          allowfullscreen
+          allow="autoplay; fullscreen"
+          referrerpolicy="strict-origin-when-cross-origin"
+          title="Player video"
+        ></iframe>
       </div>
-      <button class="watch" onclick="watchMovie()" type="button">Guarda</button>
-    </div>
+    </section>
+  </main>
 
-    <div id="serie" class="form-section">
-      <a class="choose-link" href="https://www.themoviedb.org/tv?language=it-IT" target="_blank">Scegli una serie</a>
-      <div class="form-group">
-        <label for="serie-code">Qual è la serie?</label>
-        <input type="text" id="serie-code">
+  <aside id="catalog-shell" class="catalog-shell" aria-hidden="true">
+    <button id="catalog-backdrop" class="catalog-backdrop" type="button" aria-label="Chiudi catalogo"></button>
+
+    <section class="catalog-panel" role="dialog" aria-modal="true" aria-labelledby="catalog-title">
+      <div class="catalog-header">
+        <div>
+          <p class="catalog-kicker">Catalogo integrato</p>
+          <h2 id="catalog-title">Apri catalogo</h2>
+          <p id="catalog-subtitle" class="catalog-subtitle">Ricerca, filtra e seleziona rapidamente da TMDB.</p>
+        </div>
+        <button id="catalog-close" class="catalog-close" type="button" aria-label="Chiudi catalogo">&times;</button>
       </div>
-      <div class="form-group">
-        <label for="season">Stagione</label>
-        <input type="number" id="season" value="1" min="1">
+
+      <div class="catalog-filters">
+        <div class="filter-field filter-field-wide">
+          <label for="catalog-query">Titolo</label>
+          <input id="catalog-query" type="text" placeholder="Es. Interstellar" autocomplete="off">
+        </div>
+
+        <div class="filter-field">
+          <label for="catalog-type">Tipo</label>
+          <select id="catalog-type">
+            <option value="movie">Film</option>
+            <option value="tv">Serie</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="catalog-genre">Genere</label>
+          <select id="catalog-genre">
+            <option value="">Tutti</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="catalog-year">Anno</label>
+          <input id="catalog-year" type="number" min="1900" max="2099" placeholder="Es. 2024">
+        </div>
+
+        <div class="filter-field">
+          <label for="catalog-sort">Ordina per</label>
+          <select id="catalog-sort">
+            <option value="popularity.desc">Popolarità ↓</option>
+            <option value="primary_release_date.desc">Data ↓</option>
+            <option value="primary_release_date.asc">Data ↑</option>
+            <option value="vote_average.desc">Voto ↓</option>
+            <option value="vote_average.asc">Voto ↑</option>
+            <option value="title.asc">Titolo A-Z</option>
+            <option value="title.desc">Titolo Z-A</option>
+          </select>
+        </div>
+
+        <div class="filter-field" style="display: none;">
+          <label for="catalog-rating">Voto minimo</label>
+          <select id="catalog-rating">
+            <option value="0">Qualsiasi</option>
+            <option value="5">5+</option>
+            <option value="6">6+</option>
+            <option value="7">7+</option>
+            <option value="8">8+</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="episode">Episodio</label>
-        <input type="number" id="episode" value="1" min="1">
+
+      <div class="catalog-toolbar">
+        <div class="catalog-actions-inline">
+          <button id="catalog-apply" class="catalog-action-btn" type="button">Applica filtri</button>
+          <button id="catalog-reset" class="catalog-action-btn ghost" type="button">Reset</button>
+        </div>
+        <div class="catalog-meta">
+          <span id="catalog-page-info">Pagina 1</span>
+        </div>
+        <div class="catalog-pagination">
+          <button id="catalog-prev" class="arrow-btn" type="button">&#8592; Pagina prec.</button>
+          <button id="catalog-next" class="arrow-btn" type="button">Pagina succ. &#8594;</button>
+        </div>
       </div>
-      <button class="watch" onclick="watchSeries()" type="button">Guarda</button>
-      <div class="nav-arrows">
-        <button id="back-arrow" class="arrow-button" onclick="navigateEpisode(-1)" type="button">&#8592;</button>
-        <button id="forward-arrow" class="arrow-button" onclick="navigateEpisode(1)" type="button">&#8594;</button>
+
+      <div id="catalog-feedback" class="catalog-feedback" aria-live="polite"></div>
+
+      <div class="catalog-grid-shell">
+        <div id="catalog-grid" class="catalog-grid"></div>
       </div>
-    </div>
-  </div>
 
-  <div id="video-container">
-    <iframe id="video-frame" allowfullscreen></iframe>
-  </div>
+      
+    </section>
+  </aside>
 
-  <script>
-    let currentTab = 'film';
-    function switchTab(tab, event) {
-      currentTab = tab;
-      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
-      if (event && event.target) event.target.classList.add('active');
-    }
+  <div id="toast" class="toast" aria-live="polite"></div>
 
-    function watchMovie() {
-      const code = document.getElementById('film-code').value.trim();
-      if (code) loadVideoInIframe(`https://vixsrc.to/movie/${code}`);
-    }
+  <footer>&copy; Film4Fra &mdash; Solo per uso personale</footer>
 
-    function watchSeries() {
-      const code = document.getElementById('serie-code').value.trim();
-      const season = +document.getElementById('season').value;
-      const episode = +document.getElementById('episode').value;
-      if (code && season > 0 && episode > 0) {
-        loadVideoInIframe(`https://vixsrc.to/tv/${code}/${season}/${episode}`);
-        updateArrowStatus(season, episode);
-      }
-    }
-
-    function navigateEpisode(dir) {
-      const s = document.getElementById('season');
-      const e = document.getElementById('episode');
-      let season = +s.value, episode = +e.value;
-      if (!(dir === -1 && season === 1 && episode === 1)) {
-        episode = Math.max(1, episode + dir);
-        e.value = episode;
-        watchSeries();
-      }
-    }
-
-    function updateArrowStatus(season, episode) {
-      document.getElementById('back-arrow').disabled = (season === 1 && episode === 1);
-    }
-
-    function loadVideoInIframe(url) {
-      const iframe = document.getElementById('video-frame');
-      const container = document.getElementById('video-container');
-      container.style.display = 'block';
-
-      // blocco temporaneo di window.open
-      const originalOpen = window.open;
-      window.open = () => null;
-      setTimeout(() => window.open = originalOpen, 1500);
-
-      iframe.src = url;
-    }
-  </script>
-
+  <script src="./app.js"></script>
 </body>
 </html>
